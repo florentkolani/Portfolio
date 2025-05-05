@@ -13,7 +13,7 @@ export default function App() {
         <Navbar />
         <Home /> 
       </div>
-      <div>
+      <div className="p-4 md:px-[15%] ">
         <About />
       </div>
       <div className="p-4 md:px-[15%]">

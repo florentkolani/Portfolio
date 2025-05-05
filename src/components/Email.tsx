@@ -105,7 +105,7 @@ const Email = () => {
 
     return (
         <div className="flex flex-col items-center w-full px-4 md:px-6 py-8">
-            <div className="w-full max-w-3xl bg-gray-800 rounded-lg shadow-lg p-6 md:p-8">
+            <div className="w-full max-w-full bg-gray-800 rounded-lg shadow-lg p-6 md:p-8">
                 <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center text-white">Contactez-moi</h2>
                 
                 {status.submitted && (
