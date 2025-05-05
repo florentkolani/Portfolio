@@ -37,7 +37,7 @@ const About = () => {
                             <div className="mb-2 md:mb-0">
                                 {section.icon}
                             </div> 
-                            <div className="ml-4 text-justify md:text-left">
+                            <div className="ml-4 text-start md:text-left">
                                 <h2 className="text-xl font-bold mb-1">
                                     {section.title}
                                 </h2>

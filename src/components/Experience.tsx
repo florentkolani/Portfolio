@@ -105,7 +105,7 @@ const Experience = () => {
                                 
 
                                 {experiences.description.map((desc, index) => (
-                                    <li key={index} className="text-sm text-white text-justifylist-disc ml-4">
+                                    <li key={index} className="text-sm text-white text-start list-disc ml-4">
                                         {desc}
                                     </li>
                                 ))}

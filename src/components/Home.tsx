@@ -8,7 +8,7 @@ const Home = () => {
                 <h1 className="text-4xl md:text-6xl font-bold text-center md:text-left mt-4 md:mt-0">
                     Bonjour, <br />Je suis <span className="text-accent">KOLANI Florent</span>
                 </h1>
-                <p className="my-4 text-md text-justify md:text-left">
+                <p className="my-4 text-md text-start md:text-left">
                     Développeur web avec 1 an d'expérience en applications web et mobiles (React, Node.js, TypeScript, Vue.js). Passionné par le développement, je cherche constamment de nouveaux défis pour évoluer professionnellement.
                 </p>
                 <div className="flex flex-col md:flex-row gap-4 justify-center md:justify-start mt-4">
