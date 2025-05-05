@@ -22,7 +22,7 @@ const projects = [
     {
         id: 2,
         title: 'MonRépétiteur',
-        description: 'MonRépétiteur est une plateforme d’apprentissage en ligne qui facilite la mise en relation entre parents et enseignants qualifiés. Elle permet aux familles de trouver facilement des répétiteurs adaptés aux besoins académiques de leurs enfants, tout en offrant des cours et des exercices interactifs pour renforcer leurs compétences.',
+        description: 'MonRépétiteur est une plateforme d’apprentissage en ligne qui facilite la mise en relation entre parents et enseignants qualifiés. Elle permet aux familles de trouver facilement des répétiteurs adaptés aux besoins académiques de leurs enfants.',
         technologies: ['React.js', 'Tailwind CSS', 'Node.js'],
         demoLink: '#',
         repoLink: '#',
@@ -31,7 +31,7 @@ const projects = [
     {
         id: 3,
         title: 'Portfolio web dynamique',
-        description: 'Ce projet est un portfolio interactif conçu pour présenter mes compétences, projets et expériences de manière dynamique. Il intègre des animations fluides, une navigation intuitive et une interface responsive, offrant une excellente expérience utilisateur sur tous les appareils.',
+        description: 'Ce projet est un portfolio interactif conçu pour présenter mes compétences, projets et expériences. Il intègre des animations fluides, une navigation intuitive et une interface responsive, offrant une excellente expérience utilisateur sur tous les appareils.',
         technologies: [ 'React', 'tailwind CSS'],
         demoLink: '#',
         repoLink: '#',
