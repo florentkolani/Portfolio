@@ -1,13 +1,16 @@
 interface TitleProps {
+    eyebrow: string;
     title: string;
+    description?: string;
+    id: string;
 }
-const Title = ({title}: TitleProps) => {
-    return (    
-        <div >
-            <h1 className="uppercase text-3xl font-bold text-center mb-5">
-                {title}
-            </h1>
-        </div>
-    )
-}
-export default Title
+
+const Title = ({ eyebrow, title, description, id }: TitleProps) => (
+    <header className="section-heading">
+        <p className="eyebrow">{eyebrow}</p>
+        <h2 className="section-title" id={id}>{title}</h2>
+        {description && <p className="section-intro">{description}</p>}
+    </header>
+);
+
+export default Title;

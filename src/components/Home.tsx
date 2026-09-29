@@ -1,38 +1,39 @@
-import { Download, Mail } from "lucide-react";
-import img from "../assets/assets/img.jpg";
+import { ArrowDownToLine, ArrowUpRight } from "lucide-react";
+import portrait from "../assets/assets/profil.png";
+import { getContent, type Language } from "../i18n";
 
-const Home = () => {
+interface HomeProps {
+    language: Language;
+}
+
+const Home = ({ language }: HomeProps) => {
+    const copy = getContent(language).hero;
+
     return (
-        <div className="flex flex-col-reverse md:flex-row justify-between items-center md:my-32 my-10">
-            <div className="flex flex-col">
-                <h1 className="text-4xl md:text-6xl font-bold text-center md:text-left mt-4 md:mt-0">
-                    Bonjour, <br />Je suis <span className="text-accent">KOLANI Florent</span>
-                </h1>
-                <p className="my-4 text-md text-start md:text-left">
-                    Développeur web avec 1 an d'expérience en applications web et mobiles (React, Node.js, TypeScript, Vue.js). Passionné par le développement, je cherche constamment de nouveaux défis pour évoluer professionnellement.
-                </p>
-                <div className="flex flex-col md:flex-row gap-4 justify-center md:justify-start mt-4">
-                    <a href="#email-form" className="btn btn-accent md:w-fit">
-                        <Mail className="w-6 h-5" />
-                        Contactez-moi
+        <div className="hero-layout">
+            <div className="hero-copy">
+                <p className="eyebrow"><span className="status-dot" />{copy.eyebrow}</p>
+                <h1 className="hero-name">KOLANI <span>Florent</span></h1>
+                <p className="hero-statement">{copy.title}</p>
+                <p className="hero-description">{copy.description}</p>
+                <div className="hero-actions">
+                    <a className="button button-primary" href="#email-form">
+                        {copy.contact}<ArrowUpRight aria-hidden="true" />
                     </a>
-                    <a href="/Files/CV.pdf" download className="btn btn-accent md:w-fit">
-                        <Download className="w-6 h-5" />
-                        Mon CV
+                    <a className="button button-secondary" href="/Files/CV_Florent_KOLANI.pdf" download="CV_Florent_KOLANI.pdf">
+                        <ArrowDownToLine aria-hidden="true" />{copy.cv}
                     </a>
                 </div>
             </div>
-            <div className="md:ml-60 flex justify-center items-center">
-                <div className="w-64 h-64 md:w-96 md:h-96 rounded-full overflow-hidden border-4 border-accent shadow-xl">
-                    <img
-                        src={img}
-                        alt="KOLANI Florent"
-                        className="w-full h-full object-cover"
-                    />
+            <div className="hero-portrait-wrap">
+                <span className="portrait-index">{copy.index}</span>
+                <div className="hero-portrait-frame">
+                    <img src={portrait} alt={copy.imageAlt} className="hero-portrait" fetchPriority="high" />
                 </div>
+                <span className="portrait-caption">FL / KOLANI</span>
             </div>
         </div>
     );
-}
+};
 
 export default Home;

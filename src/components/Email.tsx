@@ -1,180 +1,83 @@
-import { useState, useEffect } from 'react';
-import emailjs from '@emailjs/browser';
+import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
+import { ArrowUpRight, LoaderCircle, Mail } from "lucide-react";
+import emailjs from "@emailjs/browser";
+import { getContent, type Language } from "../i18n";
 
-/**
- * Formulaire de contact
- * @returns Formulaire de contact
- */
+interface EmailProps {
+    language: Language;
+}
 
-const Email = () => {
-    // Initialisation d'EmailJS
+const Email = ({ language }: EmailProps) => {
+    const copy = getContent(language).contact;
+    const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+    const [status, setStatus] = useState<"success" | "error" | null>(null);
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         emailjs.init("K5uqp9Y24EhYao3A5");
     }, []);
 
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        message: ''
-    });
-    
-    const [status, setStatus] = useState({
-        submitted: false,
-        success: false,
-        message: ''
-    });
-    
-    const [loading, setLoading] = useState(false);
-
-    /**
-     * Met à jour les données du formulaire en fonction de l'élément modifié
-     * @param {{ target: HTMLInputElement | HTMLTextAreaElement }} e L'événement de modification
-     */
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+    const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = event.target;
+        setFormData((previous) => ({ ...previous, [name]: value }));
+        setStatus(null);
     };
 
-/**
- * Handles the form submission event, sending form data via EmailJS.
- * Prevents default form submission behavior, displays loading state during the process,
- * and updates status based on the success or failure of the email sending operation.
- * 
- * @param {React.FormEvent<HTMLFormElement>} e - The form submission event.
- */
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
         setLoading(true);
-        
+
         try {
-            // Créer un timestamp formaté pour le paramètre "time"
-            const now = new Date();
-            const formattedDate = now.toLocaleDateString('fr-FR', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
+            const formattedDate = new Date().toLocaleString(language === "fr" ? "fr-FR" : "en-GB");
+            await emailjs.send("service_1x4zekw", "template_v1mpgpk", {
+                ...formData,
+                time: formattedDate,
             });
-            
-            // Envoi de l'email via EmailJS
-            const result = await emailjs.send(
-                'service_1x4zekw', 
-                'template_v1mpgpk', 
-                {
-                    name: formData.name,
-                    email: formData.email,
-                    message: formData.message,
-                    time: formattedDate
-                }
-            );
-            
-            if (result.text === 'OK') {
-                setStatus({
-                    submitted: true,
-                    success: true,
-                    message: 'Votre message a été envoyé avec succès!'
-                });
-                
-                // Réinitialiser le formulaire
-                setFormData({
-                    name: '',
-                    email: '',
-                    message: ''
-                });
-            } else {
-                throw new Error('Une erreur est survenue');
-            }
-        } catch (error) {
-            const errorMessage = error instanceof Error 
-                ? error.message 
-                : 'Une erreur inconnue est survenue.';
-            setStatus({
-                submitted: true,
-                success: false,
-                message: `Erreur: ${errorMessage}`
-            });
+            setStatus("success");
+            setFormData({ name: "", email: "", message: "" });
+        } catch {
+            setStatus("error");
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="flex flex-col items-center w-full px-4 md:px-6 py-8">
-            <div className="w-full max-w-full bg-gray-800 rounded-lg shadow-lg p-6 md:p-8">
-                <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center text-white">Contactez-moi</h2>
-                
-                {status.submitted && (
-                    <div className={`mb-6 p-4 rounded-md ${status.success ? 'bg-green-500/20 text-green-200' : 'bg-red-500/20 text-red-200'}`}>
-                        {status.message}
+        <section className="content-section section-contact" id="email-form" aria-labelledby="contact-title">
+            <div className="container contact-layout">
+                <div className="contact-copy">
+                    <p className="eyebrow">{copy.eyebrow}</p>
+                    <h2 className="section-title" id="contact-title">{copy.title}</h2>
+                    <p className="section-intro">{copy.description}</p>
+                    <a className="direct-email" href="mailto:kolaniflorent446@gmail.com">
+                        <Mail aria-hidden="true" />kolaniflorent446@gmail.com<ArrowUpRight aria-hidden="true" />
+                    </a>
+                </div>
+                <form className="contact-form" onSubmit={handleSubmit}>
+                    <div className="form-field">
+                        <label htmlFor="name">{copy.name}</label>
+                        <input id="name" name="name" type="text" autoComplete="name" placeholder={copy.namePlaceholder} value={formData.name} onChange={handleChange} required />
                     </div>
-                )}
-                
-                <form 
-                    className="w-full flex flex-col gap-4 md:gap-6" 
-                    onSubmit={handleSubmit}
-                >
-                    <div className="flex flex-col md:flex-row gap-4">
-                        <div className="w-full">
-                            <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">Nom</label>
-                            <input
-                                id="name"
-                                name="name"
-                                type="text"
-                                placeholder="Votre nom"
-                                value={formData.name}
-                                onChange={handleChange}
-                                className="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                                required
-                            />
-                        </div>
-                        
-                        <div className="w-full">
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">Email</label>
-                            <input
-                                id="email"
-                                name="email"
-                                type="email"
-                                placeholder="Votre email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                className="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                                required
-                            />
-                        </div>
+                    <div className="form-field">
+                        <label htmlFor="email">{copy.email}</label>
+                        <input id="email" name="email" type="email" autoComplete="email" placeholder={copy.emailPlaceholder} value={formData.email} onChange={handleChange} required />
                     </div>
-                    
-                    <div>
-                        <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-1">Message</label>
-                        <textarea
-                            id="message"
-                            name="message"
-                            placeholder="Votre message"
-                            value={formData.message}
-                            onChange={handleChange}
-                            className="w-full p-3 border border-gray-600 rounded-md bg-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                            rows={5}
-                            required
-                        ></textarea>
+                    <div className="form-field">
+                        <label htmlFor="message">{copy.message}</label>
+                        <textarea id="message" name="message" placeholder={copy.messagePlaceholder} value={formData.message} onChange={handleChange} rows={5} required />
                     </div>
-                    
-                    <button 
-                        type="submit" 
-                        className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-md transition-colors duration-300 shadow-md flex justify-center items-center"
-                        disabled={loading}
-                    >
-                        {loading ? (
-                            <span className="inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
-                        ) : null}
-                        {loading ? 'Envoi en cours...' : 'Envoyer'}
+                    {status && (
+                        <p className={`form-status ${status}`} role={status === "error" ? "alert" : "status"} aria-live="polite">
+                            {status === "success" ? copy.success : copy.failure}
+                        </p>
+                    )}
+                    <button className="button button-primary submit-button" type="submit" disabled={loading}>
+                        {loading && <LoaderCircle className="loading-icon" aria-hidden="true" />}
+                        {loading ? copy.sending : copy.send}<ArrowUpRight aria-hidden="true" />
                     </button>
                 </form>
             </div>
-        </div>
+        </section>
     );
 };
 
